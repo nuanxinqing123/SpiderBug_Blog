@@ -1,0 +1,146 @@
+- 安装Scrapy框架
+    - Windows安装
+        - 1、安装wheel：pip install wheel
+        - 2、安装twisted：pip install twisted
+        - 3、安装pywin32：pip install pywin32
+        - 4、安装scrapy： pip install scrapy
+    - Mac、Linux安装
+        - 命令：pip install scrapy
+
+- 创建Scrapy项目
+    - 命令：scrapy startproject 项目名称
+        - 目录结构
+            - spider：爬虫文件夹
+                - 必须存放一个爬虫源文件
+            - settings.py：工程的配置文件
+
+- 进入Scrapy项目
+    - 进入目录： cd 项目文件夹
+    - 创建爬虫文件：scrapy genspider Name Nmae.com
+
+- 运行Scrapy
+    - 命令：scrapy crawl 项目名称
+
+- 数据获取
+    - 数据提取：
+        - response.xpath('xxxxx').extract_first()
+        - response.xpath('xxxxx').extract()
+
+- 数据持久化存储
+    - 基于命令行的持久化存储
+        - 命令：scrapy crawl 项目名称 -o 储存文件
+            - 储存限制类型：['json', 'jsonlines', 'jl', 'csv', 'xml', 'marshal', 'pickle']
+    - 基于管道的持久化存储
+        - 在爬虫文件中进行数据解析
+        - 在items.py文件中定义相关属性
+            - 解析出了几个字段的数据，在此就定义几个属性
+        - 在爬虫文件中将解析到的数据封装到item类型的对象中
+            - 导入对应类、例如：from 项目名称.item import 类名
+        - 将item类型的对象提交给管道
+        - 在管道文件（pipelines.py）中，接受爬虫文件提交过来的item类型对象，且对其惊醒任意形式的持久化储存操作
+        - 在配置文件中开始管道机制
+            - 返回上级目录并运行
+    - 基于管道实现数据的备份
+        - 将爬取到的数据分别储存到不同的载体
+            - 实战数据储存：MySQL & Redis
+            - 爬虫文件中的item只会提交给优先级最高的管道类
+
+- Scrapy手动请求发送实现全站数据爬取
+    - yield scrapy.Request(url, callback)
+        - 使用GET请求
+        - callback：指定解析函数，用于解析数据
+    - yield scrapy.Request(url, callback, formdata)
+        - 使用POST请求
+        - formdata：字典，请求参数
+
+- 为什么start_urls列表中得URL会被自动进行Get请求？
+    - 因为列表中得url是被start_requests这个父类方法实现得Get请求发送
+        def start_requests(self):
+            for u in self.start_urls:
+                yield scrapy.Request(url=u, callback=self.parse)
+
+- 如何将start_urls中得url默认进行Post请求得发送？
+    - 重写start_requests方法即可：
+        def start_requests(self):
+            for u in self.start_urls:
+                yield scrapy.FormRequest(url=u, callback=self.parse)
+
+- 管道、引擎、Spider、调度器、下载器
+
+- Scrapy 五大核心组件
+    - 组件的作用
+        - 引擎（Scrapy）：用来处理整个系统的数据流，框架核心
+        - 调度器：接收引擎发送过来的请求，去重后压入队列，并在引擎再次请求的时候返回
+        - 下载器：下载网页内容，并将网页内容返回给Spider（Scrapy下载器是建立在Twisted这个高效异步模型上的）
+        - 爬虫（Spider）：爬虫的主要工作是从特定的网页中提取自己需要的信息，即实体（item）（用户也可以从总提取出链接，让Scrapy继续抓起下一个页面）
+        - 管道（Pipeline）：负责处理爬虫从网页中抽取的实体，主要的功能是持久化实体，验证实体的有效性，清除不需要的信息
+
+- 请求传参实现的深度爬取
+    - 深度爬取：爬取的数据没有在同一张页面中（首页数据 + 详情页数据）
+    - 在Scrapy中如果没有请求传参，就无法持久化存储数据
+        - scrapy.Request(url, callback, meta)
+            - meta是一个字典，可以将meta传递给callback
+        - callback取出meta
+            - response.meta
+
+- 中间件
+    - 作用：批量拦截请求和响应
+        - 爬虫中间件
+        - 下载中间件（推荐）
+            - 拦截请求：
+                - 篡改请求URL
+                - 伪装请求头信息
+                    - UA
+                    - Cookie
+                - 设置请求代理（重点）
+            - 拦截响应：
+                - 篡改响应数据
+
+- 大文件下载
+    - 下属管道类的scrapy封装好的，直接使用即可
+    - from scrapy.pipelines.images import ImagesPipeline  # 提供了数据下载功能
+        - 重写该管道类的三个方法：
+            - get_media_requests
+                - 对图片地址发起请求
+            - file_path
+                - 返回图片名称
+            - item_completed
+                - 返回item，将其返回给下一个即将被执行的管道类
+            - 在配置文件中添加：
+                - IMAGES_STORE = 'xxx'
+                    - xxx：储存路径
+
+- Settings.py中的常用配置
+    - 增加并发：默认scrapy开始的并发线程为32个，可以适当进行增加。在配置文件中（CONCURRENT_REQUESTS）设置
+    - 降低日志等级：scrapy运行时会有大量日志信息输出，为了减少CPU负载的。可以设置Log输出信息等级为（INFO，ERROR）即可。在配置文件中添加：LOG_LEVEL
+    - 禁止Cookie：如果不是需要Cookie，则可以在scrapy爬取数据中禁用Cookie从而减少CPU负载，提升效率。在配置文件中（COOKIES_ENABLED）设置
+    - 禁止重试：对失败的HTTP进行请求（重试）会减慢爬取的速度，因此可以禁止重试。在配置文件中添加：RETRY_ENABLED
+    - 减少下载超时：如果对一个非常慢的链接进行爬取，减少下载超时可以能让卡住的链接快速被放弃，从而提升效率。在配置文件中添加：DOWNLOAD_TIMEOUT
+        - 例如：DOWNLOAD_TIMEOUT = 10     # 超时时间为10秒
+
+- CrawlSpider
+    - Spider的一个子类。Spider爬虫文件中爬虫类的父类
+        - 子类的功能一定是多余父类
+    - 作用：被用作于专业实现全站数据爬取
+        - 将一个页面下的多有页码对应的数据惊醒爬取
+    - 基本使用:
+        - 1、创建一个工程
+        - 2、cd 工程
+        - 3、创建一个基于CrawlSpider的爬虫文件
+            - scrapy genspider -t crawl Name Nmae.com
+        - 4、执行工程
+    - 注意：
+        - 1、一个链接提取器对应一个规则解析器（多个链接提取器和多个规则解析器）
+        - 2、在实现深度爬取的过程中，需要和Scrapy.Request（）结合使用
+    - allow的注意事项
+        - 填写正则表达式去匹配
+        - 如果正则表达式为空，则去匹配所有链接
+    - scrapy rule follow的理解和应用
+        - CSDN:https://blog.csdn.net/qq_18525247/article/details/82743614
+    - 深度爬取可以使用两个类方法对应文章标题&链接和正文部分
+        - 两个管道类
+    - 管道类中判断提交
+        - if item.__class__.__name__ == '类名':
+            pass
+          else:
+            pass
