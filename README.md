@@ -1,4 +1,4 @@
-＃SpiderBug_Blog（Scrapy博客爬虫）
+# SpiderBug_Blog（Scrapy博客爬虫）
 
 学习Scrapy爬虫的一个🌰，用来针对各种博客主题的全站深度爬取。全站博文采集
 
