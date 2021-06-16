@@ -23,6 +23,10 @@
     # 站点修改（每个spider文件夹里面Py文件里的第10行左右）
     allowed_domains = ['xxxx']
     start_urls = ['xxxx/page/2/']
+
+    # 全站爬取开关
+    项目spider目录下的文件中的 ’follow=False‘ 值
+    False为关， True为开
     ```
 
 ## 笔记
