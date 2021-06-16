@@ -14,6 +14,8 @@
 * WordPress（Begin）示例：https://gsbk.org/
 
     * 现在对于知更鸟只做个这种样式的爬取
+  
+* Typecho（handsome） 示例：https://blog.say521.cn/
 
 ## 修改处
 
