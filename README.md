@@ -17,6 +17,11 @@
   
 * Typecho（handsome） 示例：https://blog.say521.cn/
 
+## 安装模块
+在项目根目录下打开终端执行以下命令，安装所需要的包
+
+  ```pip3 install -r requirements.txt```
+
 ## 修改处
 
     ```python
