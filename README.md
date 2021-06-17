@@ -43,4 +43,4 @@
 
 ## 笔记
 
-目录下的`note.txt`是我的学习笔记，可以参考学习
+目录下的`note.txt`是我的学习笔记，可以参考学习，`Scrapy_Setting.txt`是关于Scrapy的Settings.py的配置文档，搭配使用

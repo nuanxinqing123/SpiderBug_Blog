@@ -179,3 +179,9 @@
 
         def parse_item(self, response):
             pass
+
+- Scrapy设置限速（避免过快被封禁）
+    - 方法一：在settings中设置
+        - DOWNLOAD_DELAY=2  # 延时2秒，不能动态改变，导致访问延时都差不多，也容易被发现
+    - 方法二：通过自动限速扩展（参考文献：https://scrapy-chs.readthedocs.io/zh_CN/latest/topics/autothrottle.html）
+        - 参考Scrapy_Setting.txt
