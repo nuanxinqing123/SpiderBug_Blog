@@ -144,3 +144,38 @@
             pass
           else:
             pass
+
+- Settings配置
+    - 禁止使用Cookie
+        - COOKIES_ENABLED = False
+    - 降低下载延迟
+        - DOWNLOAD_DELAY = 0
+    - 多线程
+        - CONCURRENT_REQUESTS = 100
+        - CONCURRENT_REQUESTS_PER_DOMAIN = 100
+        - CONCURRENT_REQUESTS_PER_IP = 100
+    - 随机UA
+        - pip install scrapy-fake-useragent
+        - 在 settings.py 中启用随机 UA 设置命令
+            - DOWNLOADER_MIDDLEWARES = {
+                'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None, # 关闭默认方法
+                'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400, # 开启
+            }
+
+- 深度爬取框架
+    import scrapy
+    from scrapy.spiders import CrawlSpider, Rule
+    from scrapy.linkextractors import LinkExtractor
+
+
+    class xxx(CrawlSpider):
+        name = 'xxx'
+        allowed_domains = ['xxx']
+        start_urls = ['xxx']
+
+        rules = (
+            Rule(LinkExtractor(allow=r'xxx'), callback='parse_item', follow=False),
+        )
+
+        def parse_item(self, response):
+            pass
