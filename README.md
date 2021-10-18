@@ -11,11 +11,12 @@
 
 ## 开发进度
 
-* WordPress（Begin）示例：https://gsbk.org/
+* WordPress（Begin）示例：https://www.sevesum.com/
 
     * 现在对于知更鸟只做个这种样式的爬取
   
 * Typecho（handsome） 示例：https://blog.say521.cn/
+* Hexo(Butterfly) 示例：https://www.kawashiros.club/
 
 ## 安装模块
 
