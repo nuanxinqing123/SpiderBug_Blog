@@ -6,8 +6,8 @@ from Begin.items import BeginItem, BeginContent
 
 class WpBeginSpider(CrawlSpider):
     name = 'wp_begin'
-    allowed_domains = ['gsbk.org']
-    start_urls = ['https://gsbk.org/page/2/']
+    allowed_domains = ['www.sevesum.com']
+    start_urls = ['https://www.sevesum.com/page/2/']
 
     rules = (
         Rule(LinkExtractor(allow=r'page/\d+/'), callback='parse_item', follow=False),
