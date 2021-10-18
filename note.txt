@@ -157,10 +157,7 @@
     - 随机UA
         - pip install scrapy-fake-useragent
         - 在 settings.py 中启用随机 UA 设置命令
-            - DOWNLOADER_MIDDLEWARES = {
-                'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None, # 关闭默认方法
-                'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400, # 开启
-            }
+            - 参考文献：https://blog.csdn.net/weixin_38819889/article/details/109018710
 
 - 深度爬取框架
     import scrapy
@@ -185,3 +182,19 @@
         - DOWNLOAD_DELAY=2  # 延时2秒，不能动态改变，导致访问延时都差不多，也容易被发现
     - 方法二：通过自动限速扩展（参考文献：https://scrapy-chs.readthedocs.io/zh_CN/latest/topics/autothrottle.html）
         - 参考Scrapy_Setting.txt
+
+- Scrapy Log日志配置和输出
+    - 导入日志模块：import logging
+    - Settings.py文件中设置日志路径：LOG_FILE = 日志路径
+    - 扩展
+        - Log级别：
+            - CRITICAL - 严重错误
+            - ERROR - 一般错误
+            - WARNING - 警告信息
+            - INFO - 一般信息
+            - DEBUG - 调试信息
+        - Log配置选项
+            - LOG_ENABLED 默认: True，启用logging
+            - LOG_ENCODING 默认: ‘utf-8’，logging使用的编码
+            - LOG_FILE 默认: None，在当前目录里创建logging输出文件的文件名
+            - LOG_LEVEL 默认: ‘DEBUG’，log的最低级别
