@@ -17,6 +17,7 @@
   
 * Typecho（handsome） 示例：https://blog.say521.cn/
 * Hexo(Butterfly) 示例：https://www.kawashiros.club/
+* Hexo(Fluid) 示例：https://blog.6yfz.cn/
 
 ## 安装模块
 
